@@ -1,0 +1,59 @@
+services:
+  workspace:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: cloudy_workspace
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - postgres
+    networks:
+      - cloudy
+
+  nginx:
+    image: nginx:alpine
+    container_name: cloudy_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - workspace
+    networks:
+      - cloudy
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: cloudy_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-cloudy}
+      POSTGRES_USER: ${DB_USERNAME:-cloudy}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - cloudy
+
+  adminer:
+    image: adminer:latest
+    container_name: cloudy_adminer
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    networks:
+      - cloudy
+
+networks:
+  cloudy:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
