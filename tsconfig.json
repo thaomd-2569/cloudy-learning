@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "rootDir": "./resources",
+    "outDir": "./public/dist",
+
+    "module": "NodeNext",
+    "target": "esnext",
+    "lib": ["esnext", "dom"],
+    "moduleResolution": "NodeNext",
+    "types": ["vue"],
+
+    "sourceMap": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    "jsx": "preserve",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+
+    // 👇 thêm phần này
+    "baseUrl": ".",
+    "paths": {
+      "@admin/*": ["resources/admin/*"],
+      "@user/*": ["resources/user/*"],
+      "@shared/*": ["resources/js/shared/*"]
+    }
+  },
+
+  "include": [
+    "resources/**/*.ts",
+    "resources/**/*.tsx",
+    "resources/**/*.vue",
+    "resources/**/*.d.ts"
+  ],
+
+  "exclude": [
+    "node_modules",
+    "vendor"
+  ]
+}

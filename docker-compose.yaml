@@ -8,6 +8,8 @@ services:
       - .:/var/www/html
     depends_on:
       - postgres
+    ports:
+      - "5174:5174"
     networks:
       - cloudy
 
